@@ -180,20 +180,22 @@ TIA Portal 프로젝트 트리에서 우클릭 › **Add-Ins › PLC-Assistant**
 | 하드웨어 목록 Excel 내보내기 | 프로젝트 노드 | 프로젝트의 모든 디바이스를 Excel 로 |
 | 하드웨어 목록 Excel 내보내기 (선택 디바이스) | 디바이스 노드 (여러 개 선택 가능) | 고른 디바이스만 Excel 로 |
 | PLC-Assistant 서명 추가 | FB 블록 (여러 개 선택 가능) | 블록에 출처 서명을 남김 |
-| HMI 화면 가져오기 (JSON) | WinCC Unified 의 화면 폴더 · 화면 · HMI 노드 | 화면 JSON 파일을 Unified 화면으로 넣음 |
+| HMI 화면 가져오기 (JSON) | WinCC Unified 의 HMI 장치 노드 | 화면 JSON 파일을 Unified 화면으로 넣음 |
 
 ### 설치
 
 지원 버전: **TIA Portal V19 · V20 · V21**
 
-1. [Releases](../../releases) 에서 쓰는 TIA 버전의 `PlcAssistantAddIn.addin` 을 받습니다.
+1. [Releases](../../releases) 에서 쓰는 TIA 버전의 파일을 받습니다 —
+   `PlcAssistantAddIn-V19.addin` · `PlcAssistantAddIn-V20.addin` · `PlcAssistantAddIn-V21.addin`.
    버전이 맞지 않으면 TIA 가 애드인을 읽지 못합니다.
 2. 아래 폴더에 넣습니다 (`Vxx` 는 TIA 버전, 폴더가 없으면 만듭니다).
    ```
    %APPDATA%\Siemens\Automation\Portal Vxx\UserAddIns\
    ```
 3. TIA Portal 을 다시 시작합니다. 켜져 있을 때 넣은 파일은 인식되지 않습니다.
-4. 오른쪽 **Add-Ins** 태스크 카드에서 `PlcAssistantAddIn.addin` 의 Status 를 **Activate** 로 바꿉니다.
+4. 오른쪽 **Add-Ins** 태스크 카드에서 받은 파일(예: `PlcAssistantAddIn-V21.addin`)의 Status 를 **Activate** 로 바꿉니다.
+   새 버전으로 바꿀 때는 옛 파일을 지우고 넣은 뒤 다시 Activate 합니다.
    처음 한 번만 하면 됩니다. 요청 권한은 TIA 읽기/쓰기와 파일 쓰기 · 내보낸 파일 열기입니다.
 
 <!-- 이미지: images/tia-addin/activate.png — Add-Ins 태스크 카드에서 Activate -->
@@ -232,20 +234,21 @@ FB 에 "이 블록은 PLC-Assistant 로 만들었다"는 출처를 남깁니다.
 웹 편집기에서 그려 내보낸 화면 파일(`<화면 이름>.screen.json`)을 WinCC Unified 화면으로 넣습니다.
 WinCC Unified 는 화면을 파일로 가져오는 기능이 없어서, 애드인이 파일을 읽어 화면과 항목을 하나씩 만듭니다.
 
-1. 프로젝트 트리의 **Screens** 아래에 화면 폴더를 만듭니다 (이미 있는 폴더를 써도 됩니다).
-   그 폴더를 우클릭 › **Add-Ins › PLC-Assistant › HMI 화면 가져오기 (JSON)**.
-2. 화면 파일을 고릅니다 (여러 개 선택 가능).
-3. 끝나면 화면별로 만든 항목 수와 넣지 못한 것을 보여 줍니다.
+1. 프로젝트 트리에서 **HMI 장치 노드**(예: `HMI_1 [MTP1200 Unified Comfort]`)를 우클릭 ›
+   **Add-Ins › PLC-Assistant › HMI 화면 가져오기 (JSON)**.
+2. 화면을 넣을 폴더를 고릅니다. 프로젝트의 화면 폴더가 트리로 나옵니다.
+   - 맨 위의 **Screens (최상위)** 를 고르면 폴더 없이 들어갑니다.
+   - **새 폴더** 칸에 이름을 적으면 고른 폴더 아래에 그 폴더를 만들어 넣습니다.
+3. 화면 파일을 고릅니다 (여러 개 선택 가능).
+4. 끝나면 화면별로 만든 항목 수와 넣지 못한 것을 보여 줍니다.
 
-| 어디서 불렀나 | 화면이 들어가는 곳 |
-| --- | --- |
-| 화면 폴더, 또는 폴더 안의 화면 | 그 폴더 |
-| HMI 노드, 최상위 화면 | 최상위 (Screens 바로 아래) |
-
-화면이 들어가는 곳은 우클릭한 자리로만 정해집니다. 화면 파일에는 폴더가 적혀 있지 않습니다.
+화면 폴더를 직접 우클릭해서는 쓸 수 없습니다 — TIA Portal 이 WinCC Unified 화면 폴더에서는 애드인 메뉴를 열어 주지 않습니다.
+화면 파일에는 폴더가 적혀 있지 않고, 넣는 곳은 2번에서 고른 폴더로만 정해집니다.
 
 - 같은 이름의 화면이 있으면 **고칩니다** — 같은 이름의 항목은 파일의 값으로 바뀌고, 파일에 없는 항목은 그대로 둡니다.
   고치기 전에 먼저 묻습니다.
+- 화면 이름은 폴더별이 아니라 **HMI 전체에서 하나뿐**이어야 합니다. 같은 이름의 화면이 다른 폴더에 있으면
+  고른 폴더에 새로 만들 수 없어서, 있는 자리에서 고칠지 · 건너뛸지 · 취소할지 묻습니다. 폴더는 옮기지 않습니다.
 - 파일에 든 그림(svg · png · jpg · bmp · gif)은 프로젝트 그래픽으로 먼저 들어갑니다. 같은 이름의 그래픽은 덮어씁니다.
 - 이름으로만 가리킨 그래픽과 페이스플레이트는 프로젝트에 이미 있어야 합니다.
 - 태그 연결과 이벤트 스크립트도 함께 들어갑니다. 태그는 프로젝트에 있는 HMI 태그 이름이어야 합니다.
@@ -260,5 +263,5 @@ WinCC Unified 는 화면을 파일로 가져오는 기능이 없어서, 애드�
 | --- | --- |
 | Add-Ins 메뉴에 안 보임 | TIA 를 다시 시작했는지, Add-Ins 태스크 카드에서 Activate 했는지, 받은 파일이 TIA 버전과 맞는지 |
 | 서명 메뉴가 안 보임 | FB 만 선택했는지 (다른 종류가 섞이면 메뉴가 숨겨집니다) |
-| HMI 화면 가져오기 메뉴가 안 보임 | WinCC Unified 장치인지(Comfort/Advanced 패널은 대상이 아닙니다), 노드를 하나만 골랐는지 |
+| HMI 화면 가져오기 메뉴가 안 보임 | HMI 장치 노드를 우클릭했는지(화면 폴더에서는 보이지 않습니다), WinCC Unified 장치인지(Comfort/Advanced 패널은 대상이 아닙니다), 노드를 하나만 골랐는지 |
 | 내보내기 실패 | 프로젝트 폴더 쓰기 권한 · `%TEMP%\PlcAssistantAddIn\sign.log` |
